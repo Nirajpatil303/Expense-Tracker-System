@@ -3,7 +3,9 @@ package com.expensetracker.user_service.Service;
 import com.expensetracker.user_service.Respository.UserRepository;
 import com.expensetracker.user_service.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
     public User updateUser(Long id, User updatedUser) {
