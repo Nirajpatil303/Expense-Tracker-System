@@ -4,7 +4,7 @@ import com.expensetracker.expense_service.Client.UserClient;
 import com.expensetracker.expense_service.Entity.Expense;
 import com.expensetracker.expense_service.Repository.ExpenseRepository;
 import com.expensetracker.expense_service.dto.UserDto;
-import exception.UserNotFoundException;
+import com.expensetracker.expense_service.exception.UserNotFoundException;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

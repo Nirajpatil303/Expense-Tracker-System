@@ -1,4 +1,4 @@
-package exception;
+package com.expensetracker.expense_service.exception;
 
 
 import jakarta.servlet.http.HttpServletRequest;
