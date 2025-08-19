@@ -4,11 +4,13 @@ import com.expensetracker.expense_service.Client.UserClient;
 import com.expensetracker.expense_service.Entity.Expense;
 import com.expensetracker.expense_service.Repository.ExpenseRepository;
 import com.expensetracker.expense_service.dto.UserDto;
+import com.expensetracker.expense_service.exception.BudgetExceededException;
 import com.expensetracker.expense_service.exception.UserNotFoundException;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -22,7 +24,8 @@ public class ExpenseService {
 
     public Expense createExpense(Expense expense) {
 
-        validateUserExists(expense.getUserId());
+        //validateUserExists(expense.getUserId()); added New Validation method
+        validateUserAndBudget(expense.getUserId(), BigDecimal.valueOf(expense.getAmount()));
         return expenseRepository.save(expense);
     }
     public void validateUserExists(Long userId) {
@@ -37,6 +40,22 @@ public class ExpenseService {
             //throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "User Service error");
 
             throw new UserNotFoundException("User Service is temporarily unavailable");
+        }
+    }
+
+    public void validateUserAndBudget(Long userId, BigDecimal newExpenseAmount) {
+        UserDto user;
+        try {
+            user = userClient.getUserById(userId);
+        } catch (FeignException.NotFound e) {
+            throw new UserNotFoundException("User not found in User Service");
+        }
+
+        BigDecimal totalExpensesThisMonth = expenseRepository.getTotalSpentByUser(userId);
+        BigDecimal allowedBudget = BigDecimal.valueOf(user.getMonthlyBudget());
+
+        if (totalExpensesThisMonth.add(newExpenseAmount).compareTo(allowedBudget) > 0) {
+            throw new BudgetExceededException("Adding this expense exceeds the allowed monthly budget.");
         }
     }
     public List<Expense> getAllExpenses() {
