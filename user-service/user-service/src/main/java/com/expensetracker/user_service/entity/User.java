@@ -21,4 +21,6 @@ public class User {
     private String password;
 
     private Double monthlyBudget;
+
+    private String role;  // 👈 Just store "USER" or "ADMIN"
 }
