@@ -18,5 +18,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:10.1.24" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.3.0" level="project" />
   </component>
 </module>
