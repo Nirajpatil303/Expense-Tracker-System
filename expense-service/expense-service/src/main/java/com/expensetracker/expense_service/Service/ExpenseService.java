@@ -44,18 +44,18 @@ public class ExpenseService {
     }
 
     public void validateUserAndBudget(Long userId, BigDecimal newExpenseAmount) {
+        System.out.println("validateUserAndBudget called with userId: " + userId + ", amount: " + newExpenseAmount);
+
         UserDto user;
         try {
             user = userClient.getUserById(userId);
+            System.out.println("User retrieved from User Service: " + user.getName());
         } catch (FeignException.NotFound e) {
+            System.out.println("User not found in User Service");
             throw new UserNotFoundException("User not found in User Service");
-        }
-
-        BigDecimal totalExpensesThisMonth = expenseRepository.getTotalSpentByUser(userId);
-        BigDecimal allowedBudget = BigDecimal.valueOf(user.getMonthlyBudget());
-
-        if (totalExpensesThisMonth.add(newExpenseAmount).compareTo(allowedBudget) > 0) {
-            throw new BudgetExceededException("Adding this expense exceeds the allowed monthly budget.");
+        } catch (Exception e) {
+            System.out.println("Error calling User Service: " + e.getMessage());
+            throw e;
         }
     }
     public List<Expense> getAllExpenses() {

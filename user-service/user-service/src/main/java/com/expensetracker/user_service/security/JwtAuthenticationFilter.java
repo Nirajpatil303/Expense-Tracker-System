@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Get the Authorization header
         String header = request.getHeader("Authorization");
+        System.out.println("User Service JwtAuthenticationFilter: Authorization header = " + header);
 
         // Check if header has a Bearer token
         if (header != null && header.startsWith("Bearer ")) {
